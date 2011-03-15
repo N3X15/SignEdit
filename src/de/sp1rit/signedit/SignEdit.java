@@ -25,6 +25,7 @@ public class SignEdit extends JavaPlugin {
 	public SaveManager saveManager;
 	public Rights rights;
 	
+	public void onLoad() {}
 	public void onEnable() {
 		SignEditBlockListener blockListener = new SignEditBlockListener(this);
 		PluginManager pm = getServer().getPluginManager();
@@ -202,7 +203,7 @@ public class SignEdit extends JavaPlugin {
     		}
     	} else if (args.length == 3) {
     		String signId = args[1];
-    		Sign sign = signManager.getSign(signId);
+    		Sign sign = signManager.getSign(signId,(Player)sender);
     		if (sign != null) {
     			if (signManager.signExists(sign)) {
     				String newId = args[2];
@@ -261,7 +262,7 @@ public class SignEdit extends JavaPlugin {
         	}
     	} else if (args.length == 2) {
     		String signId = args[1];
-    		Sign sign = signManager.getSign(signId);
+    		Sign sign = signManager.getSign(signId,(Player)sender);
     		if (sign != null) {
     			if (signManager.signExists(sign)) {
     				if (rights.canRemoveId(sender, sign.getBlock())) {
@@ -311,7 +312,7 @@ public class SignEdit extends JavaPlugin {
         	}
     	} else if (args.length == 2) {
     		String signId = args[1];
-    		Sign sign = signManager.getSign(signId);
+    		Sign sign = signManager.getSign(signId,(Player)sender);
     		if (sign != null) {
     			if (rights.canEditSignText(sender, sign.getBlock())) {
 	    			sign.setLine(0, "");
@@ -382,10 +383,14 @@ public class SignEdit extends JavaPlugin {
     	}
     }
 
+    public void setByPos(CommandSender sender, String[] args) {
+    	
+    }
+
     public void setById(CommandSender sender, String[] args) {
         if (args.length > 2) {
             String signId = args[1];
-            Sign sign = signManager.getSign(signId);
+            Sign sign = signManager.getSign(signId,(Player)sender);
             if (sign != null) {
             	if (rights.canEditSignText(sender, sign.getBlock())) {
 	                String line, signText = "";
@@ -454,7 +459,7 @@ public class SignEdit extends JavaPlugin {
     		}
     	} else if (args.length == 3) {
             String signId = args[1];
-            Sign sign = signManager.getSign(signId);
+            Sign sign = signManager.getSign(signId,(Player)sender);
             if (sign != null) {
             	String saveId = args[2];
             	if (!saveManager.saveExists(saveId)) {
@@ -525,7 +530,7 @@ public class SignEdit extends JavaPlugin {
     		}
     	} else if (args.length == 3) {
             String signId = args[1];
-            Sign sign = signManager.getSign(signId);
+            Sign sign = signManager.getSign(signId,(Player)sender);
             if (sign != null) {
             	String saveId = args[2];
             	if (saveManager.saveExists(saveId)) {

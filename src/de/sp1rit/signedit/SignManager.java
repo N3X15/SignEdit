@@ -5,8 +5,10 @@ import java.util.logging.Logger;
 import java.util.Properties;
 import java.io.*;
 
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 import org.bukkit.block.*;
 
 public class SignManager {
@@ -289,7 +291,27 @@ public class SignManager {
          * @param signId
          * @return
          */
-        public Sign getSign(String signId) {
+        public Sign getSign(String signId, Player p) {
+        	if(signId.startsWith("{")) {
+        		// {x,y,z}
+        		String[] vec = signId.substring(1, signId.length()-2).split(",");
+        		if(p==null) return null;
+        		World pw = p.getWorld();
+        		Vector signloc = new Vector(
+    				Integer.valueOf(vec[0]), 
+    				Integer.valueOf(vec[1]), 
+    				Integer.valueOf(vec[2]));
+        		Location ploc = p.getLocation();
+        		if(signloc.distanceSquared(ploc.toVector())>36) {
+        			return null;
+        		}
+        		Block block = pw.getBlockAt(signloc.toLocation(pw));
+        		if(block==null)
+        			return null;
+        		if( block.getState() instanceof Sign)
+        			return (Sign)block.getState();
+        		return null;
+        	}
             if (signExists(signId)) {
                 String[] signLocation = idToSign.getProperty(signId).split(";");
                 if (signLocation.length == 4) {
